@@ -180,8 +180,10 @@ function sellProduct(row, column) {
                         products[row - 1][column - 1].units -= 1;
                         paintBoxes();
                         console.log('saldo despues de compra:', validCreditCards[creditCardPosition].currentAccountBalance);
+                        let contentMachineOutput = `<p>Compra realizada con exito!! Su saldo actual es ${validCreditCards[creditCardPosition].currentAccountBalance}€</p>`;
+                        contentMachineOutput += `<div id="id-image-machine-output"><img class="image-machine-output" src="${products[row - 1][column - 1].src}"></div>`;
                         $("#id-machine-output-internal").empty();
-                        $("#id-machine-output-internal").append(`<p>Compra realizada con exito!! Su saldo actual es ${validCreditCards[creditCardPosition].currentAccountBalance}€</p>`);
+                        $("#id-machine-output-internal").append(contentMachineOutput);
                     }
                     else {
                         console.log('tiene saldo insuficiente:', validCreditCards[creditCardPosition].currentAccountBalance);
@@ -194,8 +196,10 @@ function sellProduct(row, column) {
                     products[row - 1][column - 1].sold();
                     products[row - 1][column - 1].units -= 1;
                     paintBoxes();
+                    let contentMachineOutput = `<p>Compra realizada con exito!! Saldo desconocido</p>`;
+                    contentMachineOutput += `<div id="id-image-machine-output"><img class="image-machine-output" src="${products[row - 1][column - 1].src}"></div>`;
                     $("#id-machine-output-internal").empty();
-                    $("#id-machine-output-internal").append(`<p>Compra realizada con exito!! Saldo desconocido</p>`);
+                    $("#id-machine-output-internal").append(contentMachineOutput);
                 }
             }
             else {
