@@ -129,7 +129,7 @@ function paintBoxes() {
             console.log('product-name', products[i][j].name);
             let divBox = '';
             if (products[i][j].units > 0) {
-                divBox += `<div class="box-content item-${itemsCounter}">`;
+                divBox += `<div class="box-content item-${itemsCounter}" onclick="sellProduct('${i + 1}','${j + 1}');">`;
                 divBox += `<div class="box-content-image-div">`;
                 divBox += `<img class="image" src="${products[i][j].src}" />`;
                 divBox += `</div>`;
@@ -154,6 +154,40 @@ function paintBoxes() {
         }
     }
     $('#id-machine-boxes').append(divMachineBoxes);
+}
+function sellProduct(row, column) {
+    console.log(`sellProduct: ${row} - ${column}`);
+    $('#loading').show();
+    checkPayment()
+        .then(response => {
+        console.log(response);
+        $('#loading').hide();
+        $("#id-machine-output-internal")[0].scrollIntoView();
+    })
+        .catch(error => {
+        console.log(error);
+        $('#loading').hide();
+        $("#id-machine-output-internal")[0].scrollIntoView();
+    });
+}
+function checkPayment() {
+    return new Promise((resolve, reject) => {
+        const randomNumber = getRandomInt(1, 101);
+        console.log(`randomNumber: `, randomNumber);
+        if (randomNumber > 10) {
+            setTimeout(() => {
+                resolve('Operación aceptada');
+            }, 3000);
+        }
+        else {
+            setTimeout(() => {
+                resolve('Operación rechazada');
+            }, 3000);
+        }
+    });
+}
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
 }
 $('#loading').show();
 paintBoxes();

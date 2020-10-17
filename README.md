@@ -44,3 +44,11 @@ Nota: Puedes hacer el ejercicio con JS normal, pero ¿te atreves a hacerlo con T
 
 
 11. Como reto adicional, implementa en tu código (interfaz y lógica) restricciones al consumo de alcohol entre las 22h y las 8h. Es decir, si un cliente solicita una cerveza (o cualquier otro producto con alcohol) en ese periodo, la máquina debe rechazar la petición y mostrar un mensaje “No disponible” en el display.
+
+
+Tenemos los numeros de tarjeta de credito declarados en typescript con sus correspondientes saldos.
+Si pagamos con una tarjeta desconocida simplemente realiza la compra pero no mostrara el saldo restante.
+
+const creditCard1 = new CreditCard(1111111111111111, 100, 'Sherri Snyder');
+const creditCard2 = new CreditCard(2222222222222222, 5, 'Irma Fletcher');
+const creditCard3 = new CreditCard(3333333333333333, 10, 'Sonia Jackson');

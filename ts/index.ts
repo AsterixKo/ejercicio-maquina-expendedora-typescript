@@ -188,7 +188,7 @@ function paintBoxes() {
             //         </div>
             //     </div>
             if (products[i][j].units > 0) {
-                divBox += `<div class="box-content item-${itemsCounter}">`;
+                divBox += `<div class="box-content item-${itemsCounter}" onclick="sellProduct('${i + 1}','${j + 1}');">`;
                 divBox += `<div class="box-content-image-div">`;
                 divBox += `<img class="image" src="${products[i][j].src}" />`;
                 divBox += `</div>`;
@@ -198,7 +198,7 @@ function paintBoxes() {
                 divBox += `<div class="box-content-text-prize">Precio: ${products[i][j].prize}</div>`;
                 divBox += `</div>`;
                 divBox += `</div>`;
-            }else{
+            } else {
                 divBox += `<div class="box-content item-${itemsCounter}">`;
                 divBox += `<div class="box-content-image-div">`;
                 // divBox += `<img class="image" src="${products[i][j].src}" />`;
@@ -218,6 +218,52 @@ function paintBoxes() {
     $('#id-machine-boxes').append(divMachineBoxes);
 }
 
+
+function sellProduct(row: number, column: number): void {
+    console.log(`sellProduct: ${row} - ${column}`);
+
+    $('#loading').show();
+    checkPayment()
+        .then(response => {
+            console.log(response);
+            $('#loading').hide();
+            $("#id-machine-output-internal")[0].scrollIntoView();
+        })
+        .catch(error => {
+            console.log(error);
+            $('#loading').hide();
+            $("#id-machine-output-internal")[0].scrollIntoView();
+        });
+        // .finally(() => {
+        //     console.log('Se ha ejecutado el FINALLY');
+        // });
+
+}
+
+function checkPayment() {
+    return new Promise((resolve, reject) => {
+        const randomNumber = getRandomInt(1, 101);
+        console.log(`randomNumber: `, randomNumber);
+        if (randomNumber > 10) {
+            setTimeout(() => {
+                resolve('Operación aceptada');
+            }, 3000);
+        } else {
+            setTimeout(() => {
+                resolve('Operación rechazada');
+            }, 3000);
+        }
+    });
+}
+
+// Retorna un entero aleatorio entre min (incluido) y max (excluido)
+// ¡Usando Math.round() te dará una distribución no-uniforme!
+function getRandomInt(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+
 $('#loading').show();
 paintBoxes();
 $('#loading').hide();
+
