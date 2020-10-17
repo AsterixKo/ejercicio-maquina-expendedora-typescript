@@ -154,10 +154,10 @@ const product16 = new ProductLiquid(16, 'Agua', 20, 0.75, 'image/agua.png', 33);
 
 //Array de productos
 const products = [
-    [product1, product2, product3, product13], 
-    [product4, product5, product6, product14], 
-    [product7, product8, product9, product15], 
+    [product1, product2, product3, product13],
+    [product4, product5, product6, product14],
+    [product7, product8, product9, product15],
     [product10, product11, product12, product16]];
 
-    $('#loading').show();
-    $('#loading').hide();
+$('#loading').show();
+$('#loading').hide();
