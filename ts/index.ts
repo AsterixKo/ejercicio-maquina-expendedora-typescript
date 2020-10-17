@@ -176,7 +176,7 @@ function paintBoxes() {
     let itemsCounter = 1;
     for (let i = 0; i < products.length; i++) {
         for (let j = 0; j < products[i].length; j++) {
-            console.log('product-name', products[i][j].name);
+            // console.log('product-name', products[i][j].name);
             let divBox = '';
             // <div class="box-content item-1">
             //         <div class="box-content-image-div">
@@ -223,20 +223,69 @@ function sellProduct(row: number, column: number): void {
     console.log(`sellProduct: ${row} - ${column}`);
 
     $('#loading').show();
-    checkPayment()
-        .then(response => {
-            console.log(response);
-            $('#loading').hide();
-            $("#id-machine-output-internal")[0].scrollIntoView();
-        })
-        .catch(error => {
-            console.log(error);
-            $('#loading').hide();
-            $("#id-machine-output-internal")[0].scrollIntoView();
-        });
+    $("#loading")[0].scrollIntoView();
+
+    const inputCreditCardNumber = $('#input-credit-card-number').val();
+    console.log('inputCreditCardNumber:', inputCreditCardNumber);
+    if (inputCreditCardNumber === null) {
+        // if (inputCreditCardNumber === null || inputCreditCardNumber < 0|| inputCreditCardNumber.length == 0 || inputCreditCardNumber.trim() === "") {
+        const error = 'Error: debe introducir un  numero de tarjeta de 16 dígitos';
+        $('#machine-inputs-error').append(`<p class="error">${error}</p>`);
+    } else {
+        checkPayment()
+            .then(response => {
+                console.log('then');
+                console.log(response);
+                if (response === 'Operación aceptada') {
+                    const creditCardPosition = isCreditCardkKnown(inputCreditCardNumber);
+                    if (creditCardPosition != -1) {//tarjeta conocida
+                        console.log('Tarjeta de credito conocida');
+                        if (validCreditCards[creditCardPosition].currentAccountBalance >= products[row - 1][column - 1].prize) {
+                            console.log('tiene saldo suficiente:', validCreditCards[creditCardPosition].currentAccountBalance);
+                            validCreditCards[creditCardPosition].currentAccountBalance -= products[row - 1][column - 1].prize;
+                            products[row - 1][column - 1].sold();
+                            products[row - 1][column - 1].units -= 1;
+                            paintBoxes();
+                            console.log('saldo despues de compra:', validCreditCards[creditCardPosition].currentAccountBalance);
+                            $("#id-machine-output-internal").empty();
+                            $("#id-machine-output-internal").append(`<p>Compra realizada con exito!! Su saldo actual es ${validCreditCards[creditCardPosition].currentAccountBalance}€</p>`);
+                        } else {
+                            console.log('tiene saldo insuficiente:', validCreditCards[creditCardPosition].currentAccountBalance);
+                            $("#id-machine-output-internal").empty();
+                            $("#id-machine-output-internal").append(`<p>Compra rechazada. Su saldo es insuficiente, tiene ${validCreditCards[creditCardPosition].currentAccountBalance}€</p>`);
+                        }
+                    } else {//tarjeta desconocida
+                        console.log('Tarjeta de credito desconocida');
+                        //damos por hecho que tiene saldo
+                        products[row - 1][column - 1].sold();
+                        products[row - 1][column - 1].units -= 1;
+                        paintBoxes();
+                        $("#id-machine-output-internal").empty();
+                        $("#id-machine-output-internal").append(`<p>Compra realizada con exito!! Saldo desconocido</p>`);
+                    }
+                } else {//Operación rechazada
+                    $("#id-machine-output-internal").empty();
+                    $("#id-machine-output-internal").append(`<p>${response}</p>`);
+                }
+
+
+                $('#loading').hide();
+                $("#id-machine-output-internal")[0].scrollIntoView();
+            })
+            .catch(error => {
+                console.log('catch');
+                console.log(error);
+                $("#id-machine-output-internal").empty();
+                $("#id-machine-output-internal").append(`<p>${error}</p>`);
+
+                $('#loading').hide();
+                $("#id-machine-output-internal")[0].scrollIntoView();
+            });
         // .finally(() => {
         //     console.log('Se ha ejecutado el FINALLY');
         // });
+    }
+
 
 }
 
@@ -256,6 +305,19 @@ function checkPayment() {
     });
 }
 
+
+function isCreditCardkKnown(creditCardNumber: string | number | string[] | undefined): number {
+    let creditCardKnown = false;
+    let result = -1;
+    console.log('validCreditCards.length:', validCreditCards.length);
+    for (let i = 0; i < validCreditCards.length && !creditCardKnown; i++) {
+        if (validCreditCards[i].cardNumber == creditCardNumber) {
+            creditCardKnown = true;
+            result = i;
+        }
+    }
+    return result;
+}
 // Retorna un entero aleatorio entre min (incluido) y max (excluido)
 // ¡Usando Math.round() te dará una distribución no-uniforme!
 function getRandomInt(min: number, max: number): number {

@@ -126,7 +126,6 @@ function paintBoxes() {
     let itemsCounter = 1;
     for (let i = 0; i < products.length; i++) {
         for (let j = 0; j < products[i].length; j++) {
-            console.log('product-name', products[i][j].name);
             let divBox = '';
             if (products[i][j].units > 0) {
                 divBox += `<div class="box-content item-${itemsCounter}" onclick="sellProduct('${i + 1}','${j + 1}');">`;
@@ -158,17 +157,63 @@ function paintBoxes() {
 function sellProduct(row, column) {
     console.log(`sellProduct: ${row} - ${column}`);
     $('#loading').show();
-    checkPayment()
-        .then(response => {
-        console.log(response);
-        $('#loading').hide();
-        $("#id-machine-output-internal")[0].scrollIntoView();
-    })
-        .catch(error => {
-        console.log(error);
-        $('#loading').hide();
-        $("#id-machine-output-internal")[0].scrollIntoView();
-    });
+    $("#loading")[0].scrollIntoView();
+    const inputCreditCardNumber = $('#input-credit-card-number').val();
+    console.log('inputCreditCardNumber:', inputCreditCardNumber);
+    if (inputCreditCardNumber === null) {
+        const error = 'Error: debe introducir un  numero de tarjeta de 16 dígitos';
+        $('#machine-inputs-error').append(`<p class="error">${error}</p>`);
+    }
+    else {
+        checkPayment()
+            .then(response => {
+            console.log('then');
+            console.log(response);
+            if (response === 'Operación aceptada') {
+                const creditCardPosition = isCreditCardkKnown(inputCreditCardNumber);
+                if (creditCardPosition != -1) {
+                    console.log('Tarjeta de credito conocida');
+                    if (validCreditCards[creditCardPosition].currentAccountBalance >= products[row - 1][column - 1].prize) {
+                        console.log('tiene saldo suficiente:', validCreditCards[creditCardPosition].currentAccountBalance);
+                        validCreditCards[creditCardPosition].currentAccountBalance -= products[row - 1][column - 1].prize;
+                        products[row - 1][column - 1].sold();
+                        products[row - 1][column - 1].units -= 1;
+                        paintBoxes();
+                        console.log('saldo despues de compra:', validCreditCards[creditCardPosition].currentAccountBalance);
+                        $("#id-machine-output-internal").empty();
+                        $("#id-machine-output-internal").append(`<p>Compra realizada con exito!! Su saldo actual es ${validCreditCards[creditCardPosition].currentAccountBalance}€</p>`);
+                    }
+                    else {
+                        console.log('tiene saldo insuficiente:', validCreditCards[creditCardPosition].currentAccountBalance);
+                        $("#id-machine-output-internal").empty();
+                        $("#id-machine-output-internal").append(`<p>Compra rechazada. Su saldo es insuficiente, tiene ${validCreditCards[creditCardPosition].currentAccountBalance}€</p>`);
+                    }
+                }
+                else {
+                    console.log('Tarjeta de credito desconocida');
+                    products[row - 1][column - 1].sold();
+                    products[row - 1][column - 1].units -= 1;
+                    paintBoxes();
+                    $("#id-machine-output-internal").empty();
+                    $("#id-machine-output-internal").append(`<p>Compra realizada con exito!! Saldo desconocido</p>`);
+                }
+            }
+            else {
+                $("#id-machine-output-internal").empty();
+                $("#id-machine-output-internal").append(`<p>${response}</p>`);
+            }
+            $('#loading').hide();
+            $("#id-machine-output-internal")[0].scrollIntoView();
+        })
+            .catch(error => {
+            console.log('catch');
+            console.log(error);
+            $("#id-machine-output-internal").empty();
+            $("#id-machine-output-internal").append(`<p>${error}</p>`);
+            $('#loading').hide();
+            $("#id-machine-output-internal")[0].scrollIntoView();
+        });
+    }
 }
 function checkPayment() {
     return new Promise((resolve, reject) => {
@@ -185,6 +230,18 @@ function checkPayment() {
             }, 3000);
         }
     });
+}
+function isCreditCardkKnown(creditCardNumber) {
+    let creditCardKnown = false;
+    let result = -1;
+    console.log('validCreditCards.length:', validCreditCards.length);
+    for (let i = 0; i < validCreditCards.length && !creditCardKnown; i++) {
+        if (validCreditCards[i].cardNumber == creditCardNumber) {
+            creditCardKnown = true;
+            result = i;
+        }
+    }
+    return result;
 }
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
