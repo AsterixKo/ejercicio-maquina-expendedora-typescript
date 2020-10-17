@@ -116,3 +116,5 @@ const products = [
     [product7, product8, product9, product15],
     [product10, product11, product12, product16]
 ];
+$('#loading').show();
+$('#loading').hide();

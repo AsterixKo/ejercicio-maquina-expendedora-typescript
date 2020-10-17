@@ -4,9 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
+    <div id="loading"></div>
+    <div class="main-content">
+        <div class="main-content-internal">
+            <div class="machine-header">
+                <h1>Food and Drinks</h1>
+            </div>
+            <div class="machine-inputs">
+                <div class="machine-input-credit-card-div">
+                    <h2>Introduzca número de tarjeta de credito</h2>
+                    <input id="input-credit-card-number" type="number" placeholder="1111111111111111">
+                </div>
+                <div class="machine-inputs-error"></div>
+            </div>
+        </div>
+    </div>
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="js/index.js"></script>
