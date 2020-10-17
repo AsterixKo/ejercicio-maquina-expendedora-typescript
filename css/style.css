@@ -154,6 +154,10 @@ body {
     font-size: larger;
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
 }
 
 .box-content-text {

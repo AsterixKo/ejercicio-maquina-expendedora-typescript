@@ -144,23 +144,23 @@ const creditCard3 = new CreditCard(3333333333333333, 10, 'Sonia Jackson');
 //Array de tarjetas de credito validas
 const validCreditCards = [creditCard1, creditCard2, creditCard3];
 
-const product1 = new ProductSolid(1, 'Oreos', 20, 1.50, 'image/oreo.png', 160);
-const product2 = new ProductSolid(2, 'Cacahuetes', 20, 1.00, 'image/cacahuetes.png', 150);
-const product3 = new ProductSolid(3, 'Lays Classic', 20, 1.50, 'image/lays.png', 150);
-const product4 = new ProductSolid(4, 'M&Ms', 20, 1.50, 'image/emanems.png', 150);
-const product5 = new ProductSolid(5, 'Mikado', 20, 1.00, 'image/mikado.png', 75);
-const product6 = new ProductSolid(6, 'Pringles', 20, 1.25, 'image/pringles.png', 40);
-const product7 = new ProductSolid(7, 'Donuts', 20, 1.50, 'image/donuts.png', 150);
-const product8 = new ProductSolid(8, 'Palomitas', 20, 1.50, 'image/palomitas.png', 150);
+const product1 = new ProductSolid(1, 'Oreos', 20, 1.50, 'image/oreo-transparente.png', 160);
+const product2 = new ProductSolid(2, 'Cacahuetes', 20, 1.00, 'image/cacahuetes-transparente.png', 150);
+const product3 = new ProductSolid(3, 'Lays Classic', 20, 1.50, 'image/lays-transparente.png', 150);
+const product4 = new ProductSolid(4, 'M&Ms', 20, 1.50, 'image/emanems-transparente.png', 150);
+const product5 = new ProductSolid(5, 'Mikado', 20, 1.00, 'image/mikado-transparente.png', 75);
+const product6 = new ProductSolid(6, 'Pringles', 20, 1.25, 'image/pringles-transparente.png', 40);
+const product7 = new ProductSolid(7, 'Donuts', 20, 1.50, 'image/donuts-transparente.png', 150);
+const product8 = new ProductSolid(8, 'Palomitas', 20, 1.50, 'image/palomitas-transparente.png', 150);
 // const product9 = new ProductSolid(9, 'Ruffles Original', 20, 1.50, 'image/ruffles.png', 150);
 // const product10 = new ProductSolid(10, 'Cheetos', 20, 1.50, 'image/cheetos.png', 150);
 // const product11 = new ProductSolid(11, 'Doritos', 20, 1.50, 'image/doritos.png', 150);
 // const product12 = new ProductSolid(12, 'KitKat', 20, 1.50, 'image/kitkat.png', 150);
 
-const product9 = new ProductLiquid(9, 'Coca-cola', 20, 1.00, 'image/cocacola.png', 33, false);
-const product10 = new ProductLiquid(10, 'Heineken', 20, 1.00, 'image/heineken.png', 33, true);
-const product11 = new ProductLiquid(11, 'Pepsi', 20, 1.00, 'image/pepsi.png', 33, false);
-const product12 = new ProductLiquid(12, 'Agua', 20, 0.75, 'image/agua.png', 33, false);
+const product9 = new ProductLiquid(9, 'Coca-cola', 20, 1.00, 'image/cocacola-transparente.png', 33, false);
+const product10 = new ProductLiquid(10, 'Heineken', 20, 1.00, 'image/heineken-transparente.png', 33, true);
+const product11 = new ProductLiquid(11, 'Pepsi', 20, 1.00, 'image/pepsi-transparente.png', 33, false);
+const product12 = new ProductLiquid(12, 'Agua', 20, 0.75, 'image/agua-transparente.png', 33, false);
 
 //Array de productos
 const products = [
@@ -169,5 +169,55 @@ const products = [
     [product5, product6, product11],
     [product7, product8, product12]];
 
+function paintBoxes() {
+    console.log('products.length', products.length);
+    $('#id-machine-boxes').empty();
+    let divMachineBoxes = '';
+    let itemsCounter = 1;
+    for (let i = 0; i < products.length; i++) {
+        for (let j = 0; j < products[i].length; j++) {
+            console.log('product-name', products[i][j].name);
+            let divBox = '';
+            // <div class="box-content item-1">
+            //         <div class="box-content-image-div">
+            //             <img class="image" src="image/oreo-transparente.png" />
+            //         </div>
+            //         <div class="box-content-text">
+            //             <div class="box-content-text-name">Oreo</div>
+            //             <div class="box-content-text-prize">1.00</div>
+            //         </div>
+            //     </div>
+            if (products[i][j].units > 0) {
+                divBox += `<div class="box-content item-${itemsCounter}">`;
+                divBox += `<div class="box-content-image-div">`;
+                divBox += `<img class="image" src="${products[i][j].src}" />`;
+                divBox += `</div>`;
+                divBox += `<div class="box-content-text">`;
+                divBox += `<div class="box-content-text-name">${products[i][j].name}</div>`;
+                divBox += `<div class="box-content-text-units">Unidades: ${products[i][j].units}</div>`;
+                divBox += `<div class="box-content-text-prize">Precio: ${products[i][j].prize}</div>`;
+                divBox += `</div>`;
+                divBox += `</div>`;
+            }else{
+                divBox += `<div class="box-content item-${itemsCounter}">`;
+                divBox += `<div class="box-content-image-div">`;
+                // divBox += `<img class="image" src="${products[i][j].src}" />`;
+                divBox += `</div>`;
+                divBox += `<div class="box-content-text">`;
+                divBox += `<div class="box-content-text-no-units">No quedan unidades</div>`;
+                divBox += `</div>`;
+                divBox += `</div>`;
+            }
+
+
+            divMachineBoxes += divBox;
+            itemsCounter++;
+        }
+    }
+
+    $('#id-machine-boxes').append(divMachineBoxes);
+}
+
 $('#loading').show();
+paintBoxes();
 $('#loading').hide();
