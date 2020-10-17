@@ -49,6 +49,8 @@ Nota: Puedes hacer el ejercicio con JS normal, pero ¿te atreves a hacerlo con T
 Tenemos los numeros de tarjeta de credito declarados en typescript con sus correspondientes saldos.
 Si pagamos con una tarjeta desconocida simplemente realiza la compra pero no mostrara el saldo restante.
 
+```
 const creditCard1 = new CreditCard(1111111111111111, 100, 'Sherri Snyder');
 const creditCard2 = new CreditCard(2222222222222222, 5, 'Irma Fletcher');
 const creditCard3 = new CreditCard(3333333333333333, 10, 'Sonia Jackson');
+```
