@@ -225,13 +225,35 @@ function sellProduct(row: number, column: number): void {
     $('#loading').show();
     $("#loading")[0].scrollIntoView();
 
-    const inputCreditCardNumber = $('#input-credit-card-number').val();
+    const inputCreditCardNumber:string = $('#input-credit-card-number').val() as string;
     console.log('inputCreditCardNumber:', inputCreditCardNumber);
-    if (inputCreditCardNumber === null) {
-        // if (inputCreditCardNumber === null || inputCreditCardNumber < 0|| inputCreditCardNumber.length == 0 || inputCreditCardNumber.trim() === "") {
+    if (inputCreditCardNumber === null || inputCreditCardNumber.length == 0 || inputCreditCardNumber.trim() === "" || inputCreditCardNumber.trim().length != 16) {
+        console.log('empezamos a tratar el error');
         const error = 'Error: debe introducir un  numero de tarjeta de 16 dígitos';
-        $('#machine-inputs-error').append(`<p class="error">${error}</p>`);
+        $("#id-machine-inputs-error").empty();
+        $('#id-machine-inputs-error').append(`<p class="error">${error}</p>`);
+        console.log('terminamos de tratar el error');
+        $('#loading').hide();
+        $("#id-machine-inputs-error")[0].scrollIntoView();
+    } else if (isNaN(Number(inputCreditCardNumber))) {
+        console.log('empezamos a tratar el error isNaN');
+        const error = 'Error: debe introducir un  numero de tarjeta de 16 dígitos';
+        $("#id-machine-inputs-error").empty();
+        $('#id-machine-inputs-error').append(`<p class="error">${error}</p>`);
+        console.log('terminamos de tratar el error isNaN');
+        $('#loading').hide();
+        $("#id-machine-inputs-error")[0].scrollIntoView();
+    } else if (!isNaN(Number(inputCreditCardNumber)) && Number(inputCreditCardNumber) < 0) {
+        console.log('empezamos a tratar el error !isNaN && <0');
+        const error = 'Error: debe introducir un  numero de tarjeta de 16 dígitos';
+        $("#id-machine-inputs-error").empty();
+        $('#id-machine-inputs-error').append(`<p class="error">${error}</p>`);
+        console.log('terminamos de tratar el error !isNaN && <0');
+        $('#loading').hide();
+        $("#id-machine-inputs-error")[0].scrollIntoView();
     } else {
+        $("#id-machine-inputs-error").empty();
+
         checkPayment()
             .then(response => {
                 console.log('then');

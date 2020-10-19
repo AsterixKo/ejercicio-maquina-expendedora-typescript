@@ -165,18 +165,23 @@ body {
     flex-direction: column;
     align-items: center;
 }
-#id-image-machine-output{
+
+#id-image-machine-output {
     width: 200px;
     height: 200px;
 }
 
-.image-machine-output{
+.image-machine-output {
     width: 100%;
     height: 100%;
 }
 
-.machine-output-internal{
+.machine-output-internal {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.error {
+    color: red;
 }
